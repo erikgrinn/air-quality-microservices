@@ -7,7 +7,7 @@
     "build": "webpack --config webpack.prod.js",
     "dev": "webpack serve --config webpack.dev.js",
     "deploy-gh": "git subtree push --prefix dist origin gh-pages",
-    "commit-dist": "git add --force dist && git commit -m 'Initial dist subtree commit'",
+    "commit-dist": "git add dist -f && git commit -m 'deployment commit'",
     "delete-dist": "rm -rf dist",
     "delete-gh": "git push origin --delete gh-pages"
   },
