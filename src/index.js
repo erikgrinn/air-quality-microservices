@@ -1,6 +1,6 @@
 import './styles.css';
 import data from './files/cities_air_quality_water_pollution.18-10-2021.csv';
-// import Papa from 'papaparse';
+import Papa from 'papaparse';
 
 let cleanData = []; // Store parsed CSV data
 let filteredData = []; // Store filtered data
@@ -36,10 +36,11 @@ document.getElementById('applyFilter').addEventListener('click', function() {
     if (filterState && uniqueStates.includes(filterState)) {
         // Filter data based on user input
         filteredData = cleanData.filter(row => row[1] === filterState);
+        console.log(filteredData)
         
-        document.getElementById('downloadFiltered').style.display = 'block'; // Show download button
+        document.getElementById('downloadFiltered').style.display = 'inline'; // Show download button
     } else {
-        alert('Please enter a valid state.');
+        alert('Please enter a valid state or region.');
     }
 });
 
