@@ -1,0 +1,30 @@
+{
+  "name": "main-project",
+  "version": "1.0.0",
+  "main": "webpack.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.prod.js",
+    "dev": "webpack serve --config webpack.dev.js",
+    "deploy-gh": "git subtree push --prefix dist origin gh-pages",
+    "commit-dist": "git add --force dist && git commit -m 'Initial dist subtree commit'",
+    "delete-dist": "rm -rf dist",
+    "delete-gh": "git push origin --delete gh-pages"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "blob": "^0.1.0",
+    "papaparse": "^5.4.1",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4"
+  },
+  "devDependencies": {
+    "css-loader": "^7.1.2",
+    "html-loader": "^5.1.0",
+    "html-webpack-plugin": "^5.6.3",
+    "style-loader": "^4.0.0",
+    "webpack-dev-server": "^5.1.0"
+  }
+}
