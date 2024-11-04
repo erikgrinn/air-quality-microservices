@@ -15,11 +15,6 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/template.html",
     }),
-    new CopyWebpackPlugin({
-      patterns: [
-          { from: 'src/files/*.csv', to: 'files/[name][ext]' }, // Adjust the pattern as needed
-      ],
-    }),
   ],
   module: {
     rules: [
