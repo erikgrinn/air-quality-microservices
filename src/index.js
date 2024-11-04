@@ -1,7 +1,7 @@
 import './styles.css';
 import Papa from 'papaparse';
 
-let parsedData = []; // Store parsed CSV data
+let cleanData = []; // Store parsed CSV data
 let filteredData = []; // Store filtered data
 
 // Parse CSV file when user uploads it
@@ -13,14 +13,22 @@ document.getElementById('csvFileInput').addEventListener('change', function(even
             header: true,
             skipEmptyLines: true,
             complete: function(results) {
-                // parsedData = results.data
-                parsedData = results.data.map(row=> {
-                    Object.keys(row).forEach(key=> {
-                        row[key] = row[key].trim().replace(/^"|"$/g, '').replace(/\\"/g, '"');
-                    })
-                    return row
-                }); // Store parsed data globally
-                console.log(parsedData.slice(0,10))
+                cleanData = results.data.map(row => {
+                    const cleanedRow = {};
+                    
+                    Object.keys(row).forEach(key => {
+                        // Clean the key: remove surrounding quotes and any leading/trailing spaces
+                        const cleanKey = key.trim().replace(/^"|"$/g, '').replace(/\\"/g, '"');
+                        
+                        // Clean the value: remove surrounding quotes and any leading/trailing spaces
+                        const cleanValue = row[key].trim().replace(/^"|"$/g, '').replace(/\\"/g, '"');
+                        
+                        // Add cleaned key-value pair to the new row object
+                        cleanedRow[cleanKey] = cleanValue;
+                    });
+                    return cleanedRow;
+                });
+                console.log(cleanData.slice(0,10))
             },
             error: function(error) {
                 console.error('Error parsing CSV:', error.message);
@@ -39,11 +47,11 @@ document.getElementById('applyFilter').addEventListener('click', function() {
     const filterState = document.getElementById('filterState').value.trim();
     console.log(filterState)
 
-    let uniqueStates = [...new Set(parsedData.map(row => row["Region"]))]; // Get unique states
+    let uniqueStates = [...new Set(cleanData.map(row => row["Region"]))]; // Get unique states
 
     if (filterState && uniqueStates.includes(filterState)) {
         // Filter data based on user input
-        filteredData = parsedData.filter(row => row["Region"] === filterState);
+        filteredData = cleanData.filter(row => row["Region"] === filterState);
         
         document.getElementById('downloadFiltered').style.display = 'block'; // Show download button
     } else {
