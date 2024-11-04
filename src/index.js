@@ -35,9 +35,8 @@ console.log(cleanData.slice(0,10))
 
 
 // Filter data when the user clicks "Apply Filter"
-document.getElementById('applyFilter').addEventListener('click', function() {
+document.getElementById('applyStateFilter').addEventListener('click', function() {
     const filterState = document.getElementById('filterState').value.trim().toLowerCase();
-    console.log(filterState)
 
     let uniqueStates = [...new Set(cleanData.map(row => row[1]))]; // Get unique states
 
