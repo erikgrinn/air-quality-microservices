@@ -11,10 +11,18 @@ body {
 }
 
 .header-title {
-    font-size: 36px;
+    display: flex;
+    flex-direction: row;
+    gap: 128px;
+    font-size: 28px;
+    align-items: center;
     margin-left: 50px;
     margin-bottom: 20px;
     padding-top: 24px;
+}
+
+.welcome {
+    font-size: 36px;
 }
 
 .header-inputs {

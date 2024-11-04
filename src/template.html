@@ -10,11 +10,16 @@
 </head>
 <body>
     <div class="header">
-        <div class="header-title"><b>Welcome</b></div>
+        <div class="header-title">
+            <div class=welcome><b>Welcome!</b></div>
+            <div class=steps>
+                Filter > Download
+            </div>
+        </div>
         <div class="header-inputs">
-            <input type="file" id="csvFileInput" accept=".csv">
+            <!-- <input type="file" id="csvFileInput" accept=".csv"> -->
             <div>
-                <label for="filterState">Filter State:</label>
+                <label for="filterState">Filter by State:</label>
                 <input type="text" id="filterState" placeholder="e.g., New Jersey">
                 <button id="applyFilter">Apply Filter</button>
             </div>

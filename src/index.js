@@ -1,43 +1,27 @@
 import './styles.css';
-import Papa from 'papaparse';
+import data from './files/cities_air_quality_water_pollution.18-10-2021.csv';
+// import Papa from 'papaparse';
 
 let cleanData = []; // Store parsed CSV data
 let filteredData = []; // Store filtered data
 
-// Parse CSV file when user uploads it
-document.getElementById('csvFileInput').addEventListener('change', function(event) {
-    const file = event.target.files[0];
-
-    if (file) {
-        Papa.parse(file, {
-            header: true,
-            skipEmptyLines: true,
-            complete: function(results) {
-                cleanData = results.data.map(row => {
-                    const cleanedRow = {};
-                    
-                    Object.keys(row).forEach(key => {
-                        // Clean the key: remove surrounding quotes and any leading/trailing spaces
-                        const cleanKey = key.trim().replace(/^"|"$/g, '').replace(/\\"/g, '"');
-                        
-                        // Clean the value: remove surrounding quotes and any leading/trailing spaces
-                        const cleanValue = row[key].trim().replace(/^"|"$/g, '').replace(/\\"/g, '"');
-                        
-                        // Add cleaned key-value pair to the new row object
-                        cleanedRow[cleanKey] = cleanValue;
-                    });
-                    return cleanedRow;
-                });
-                console.log(cleanData.slice(0,10))
-            },
-            error: function(error) {
-                console.error('Error parsing CSV:', error.message);
-            }
+    cleanData = data.map(row => {
+        const cleanedRow = {};
+        
+        Object.keys(row).forEach(key => {
+            // Clean the key: remove surrounding quotes and any leading/trailing spaces
+            const cleanKey = key.trim().replace(/^"|"$/g, '').replace(/\\"/g, '"');
+            
+            // Clean the value: remove surrounding quotes and any leading/trailing spaces
+            const cleanValue = row[key].trim().replace(/^"|"$/g, '').replace(/\\"/g, '"');
+            
+            // Add cleaned key-value pair to the new row object
+            cleanedRow[cleanKey] = cleanValue;
         });
-    } else {
-        console.error("No file selected");
-    }
-});
+        return cleanedRow;
+    });
+    console.log(cleanData.slice(0,10))
+
 
 // Assuming parsedData is an array of objects, where each object represents a row from the CSV
 
@@ -47,11 +31,11 @@ document.getElementById('applyFilter').addEventListener('click', function() {
     const filterState = document.getElementById('filterState').value.trim();
     console.log(filterState)
 
-    let uniqueStates = [...new Set(cleanData.map(row => row["Region"]))]; // Get unique states
+    let uniqueStates = [...new Set(cleanData.map(row => row[1]))]; // Get unique states
 
     if (filterState && uniqueStates.includes(filterState)) {
         // Filter data based on user input
-        filteredData = cleanData.filter(row => row["Region"] === filterState);
+        filteredData = cleanData.filter(row => row[1] === filterState);
         
         document.getElementById('downloadFiltered').style.display = 'block'; // Show download button
     } else {
