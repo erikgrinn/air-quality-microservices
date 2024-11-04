@@ -10,10 +10,10 @@ let filteredData = []; // Store filtered data
         
         Object.keys(row).forEach(key => {
             // Clean the key: remove surrounding quotes and any leading/trailing spaces
-            const cleanKey = key.trim().replace(/^"|"$/g, '').replace(/\\"/g, '"');
+            const cleanKey = key.trim().toLowerCase().replace(/^"|"$/g, '').replace(/\\"/g, '"');
             
             // Clean the value: remove surrounding quotes and any leading/trailing spaces
-            const cleanValue = row[key].trim().replace(/^"|"$/g, '').replace(/\\"/g, '"');
+            const cleanValue = row[key].trim().toLowerCase().replace(/^"|"$/g, '').replace(/\\"/g, '"');
             
             // Add cleaned key-value pair to the new row object
             cleanedRow[cleanKey] = cleanValue;
@@ -28,7 +28,7 @@ let filteredData = []; // Store filtered data
 
 // Filter data when the user clicks "Apply Filter"
 document.getElementById('applyFilter').addEventListener('click', function() {
-    const filterState = document.getElementById('filterState').value.trim();
+    const filterState = document.getElementById('filterState').value.trim().toLowerCase();
     console.log(filterState)
 
     let uniqueStates = [...new Set(cleanData.map(row => row[1]))]; // Get unique states
@@ -38,7 +38,6 @@ document.getElementById('applyFilter').addEventListener('click', function() {
         filteredData = cleanData.filter(row => row[1] === filterState);
         console.log(filteredData)
         
-        document.getElementById('downloadFiltered').style.display = 'inline'; // Show download button
     } else {
         alert('Please enter a valid state or region.');
     }
