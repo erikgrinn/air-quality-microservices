@@ -32,3 +32,9 @@ body {
 .header-inputs {
     margin-left: 50px;
 }
+
+#output {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
