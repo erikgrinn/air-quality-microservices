@@ -1,23 +1,11 @@
 
-import * as Plot from "@observablehq/plot";
+// import * as Plot from "@observablehq/plot";
+import Chart from 'chart.js/auto';
+
 // import { csvParse } from 'd3-dsv';
 import data from './files/US_AQI_Lite.csv'
 
 function createChart() {
-    // const response = await fetch('./files/US_AQI_Lite.csv');
-    // const text = await response.text();
-    // const data = csvParse(text);
-    console.log(data)
-    console.log(typeof data[1].density)
-
-    // const cleanData = data.map(row => {
-    //     row.density = parseInt(row.density); 
-    //     row.AQI = parseInt(row.AQI)
-    //     return row;
-    // });
-    console.log(data);
-    console.log(data[1].density)
-
 
     // Group by state_id and calculate the average AQI
     const averageAQIByState = data.reduce((acc, row) => {
@@ -46,18 +34,43 @@ function createChart() {
     });
 
 
+    const ctx = document.getElementById('output').getContext('2d');
+    
+    const labels = averageData.map(item => item.state_id); // x-axis labels
+    const dataValues = averageData.map(item => item.average_AQI); // y-axis data
 
-        const chart = Plot.plot({
-        marks: [
-            Plot.barY(averageData, { x: "state_id", y: "average_AQI" })
-        ]
+    const chart = new Chart(ctx, {
+        type: 'bar', // Bar chart type
+        data: {
+            labels: labels, // x-axis labels
+            datasets: [{
+                label: 'Average AQI by State',
+                data: dataValues, // y-axis data
+                backgroundColor: 'rgb(29, 111, 58, 0.75)',
+                borderColor: 'rgb(29, 111, 58, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'State ID'
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Average AQI'
+                    }
+                }
+            }
+        }
     });
 
-    // const chart = Plot.plot({
-    //     marks: [
-    //         Plot.barY(data, { x: "state_id", y: averageData })
-    //     ]
-    // });
     document.querySelector('#output').appendChild(chart);
 }
 

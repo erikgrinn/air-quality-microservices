@@ -15,8 +15,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "@observablehq/plot": "^0.6.16",
     "blob": "^0.1.0",
+    "chart.js": "^4.4.6",
     "papaparse": "^5.4.1",
     "path-browserify": "^1.0.1",
     "webpack": "^5.96.1",
