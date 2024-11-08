@@ -1,8 +1,5 @@
 
-// import * as Plot from "@observablehq/plot";
 import Chart from 'chart.js/auto';
-
-// import { csvParse } from 'd3-dsv';
 import data from './files/US_AQI_Lite.csv'
 
 function createChart() {
@@ -71,7 +68,7 @@ function createChart() {
         }
     });
 
-    document.querySelector('#output').appendChild(chart);
+    // document.querySelector('#output').appendChild(chart);
 }
 
 
