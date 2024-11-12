@@ -68,7 +68,7 @@ function createChart() {
         }
     });
 
-    // document.querySelector('#output').appendChild(chart);
+    // document.querySelector('#output').appendChild(chart); not needed using canvas with chart.js
 }
 
 
