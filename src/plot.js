@@ -91,6 +91,7 @@ async function createChart() {
         },
         options: {
             responsive: true,
+            // maintainAspectRatio: false,  // allows resizing without maintaining the original aspect ratio
             scales: {
                 x: {
                     title: {

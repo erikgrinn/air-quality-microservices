@@ -1,4 +1,6 @@
 body {
+    display: flex;
+    flex-direction: column;
     font-family: Arial, sans-serif;
     margin: 0 auto;
     height: 100vh;
@@ -6,6 +8,7 @@ body {
 }
 
 .header {
+    /* display: flex; */
     margin: 0;
     background-color: #ea8024 ;
 }
@@ -33,9 +36,17 @@ body {
     margin-left: 50px;
 }
 
-#output {
-    display: flex;
+#output-container {
+    /* flex-grow: 1;             */
     margin-top: 12px;
-    width: 75%;
+    display: flex;
     justify-content: center;
+    align-items: center;
+    overflow: hidden;        /* Prevents scrolling if content exceeds container */
+}
+
+canvas {
+    max-height: 100%;        /* Ensures canvas doesn't exceed output-container height */
+    width: 100%;             /* Adjusts width to fill available space */
+    height: auto;            /* Keeps aspect ratio for the chart */
 }
