@@ -1,11 +1,36 @@
-
+import Papa from 'papaparse';
 import Chart from 'chart.js/auto';
-import data from './files/US_AQI_Lite.csv'
+// import data from './files/US_AQI_Lite.csv'
+const csvFilePath = './files/US_AQI_Lite.csv';
 
-function createChart() {
+
+
+// Parse the CSV data
+// Fetch the CSV file and parse it with PapaParse
+
+async function createChart() {
+    let parsedData = []
+
+    const response = await fetch(csvFilePath);
+    const csvData = await response.text();
+    // Parse the CSV data using PapaParse
+    Papa.parse(csvData, {
+    header: true, // Treat the first row as headers
+    dynamicTyping: true, // Automatically convert numbers, booleans, etc.
+    skipEmptyLines: true, // Ignore empty lines
+    complete: function(results) {
+        parsedData = results.data; // The parsed CSV data
+        console.log(parsedData); // Log the parsed data
+        
+        // You can now use `parsedData` for further processing
+    },
+    error: function(error) {
+        console.error('Error parsing CSV:', error);
+    }
+    });
 
     // Group by state_id and calculate the average AQI
-    const averageAQIByState = data.reduce((acc, row) => {
+    const averageAQIByState = parsedData.reduce((acc, row) => {
         const state = row.state_id;
         const aqi = row.AQI;
 
@@ -29,6 +54,7 @@ function createChart() {
             average_AQI: totalAQI / count  // Calculate average
         };
     });
+    console.log(averageData)
 
 
     const ctx = document.getElementById('output').getContext('2d');
