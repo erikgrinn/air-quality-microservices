@@ -46,6 +46,7 @@ async function createChart() {
         return acc;
     }, {});
 
+
     // Now calculate the average AQI for each state
     const averageData = Object.keys(averageAQIByState).map(state => {
         const { totalAQI, count } = averageAQIByState[state];
@@ -54,8 +55,22 @@ async function createChart() {
             average_AQI: totalAQI / count  // Calculate average
         };
     });
-    console.log(averageData)
 
+    // * below is another way/explanation to get the averageData that was done above
+    // // Create an array to hold the average AQI by state
+    // const averageData = [];
+
+    // // Loop through each state in the averageAQIByState object
+    // for (const state in averageAQIByState) {
+    //     const stateData = averageAQIByState[state];
+    //     const averageAQI = stateData.totalAQI / stateData.count; // Calculate the average AQI
+
+    //     // Add the result to the averageData array as a new object
+    //     averageData.push({
+    //         state_id: state,
+    //         average_AQI: averageAQI
+    //     });
+    // }
 
     const ctx = document.getElementById('output').getContext('2d');
     
@@ -93,8 +108,6 @@ async function createChart() {
             }
         }
     });
-
-    // document.querySelector('#output').appendChild(chart); not needed using canvas with chart.js
 }
 
 
