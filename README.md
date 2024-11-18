@@ -32,6 +32,7 @@ To make a request, clients must:
     "prescriber": "string"
   }
 }
+```
 
 ### **How to Receive Data**
 
@@ -50,3 +51,4 @@ The microservice sends responses in JSON format. The structure depends on the ac
     }
   ]
 }
+```
