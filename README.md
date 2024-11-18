@@ -54,5 +54,15 @@ The microservice sends responses in JSON format. The structure depends on the ac
 ```
 ## UML Diagram
 
-  <img width="316" alt="image" src="https://github.com/user-attachments/assets/3938a758-9d48-4343-bd4f-7f0c6a361d70">
+```mermaid
+sequenceDiagram
+    participant Client
+    participant Microservice
+    participant ZMQ as "ZeroMQ Pipe"
+
+    Client->>ZMQ: Send Request (JSON)
+    ZMQ->>Microservice: Pass Request
+    Microservice->>ZMQ: Send Response (JSON)
+    ZMQ->>Client: Pass Response
+```
 
