@@ -57,12 +57,11 @@ The microservice sends responses in JSON format. The structure depends on the ac
 ```mermaid
 sequenceDiagram
     participant Client
+    participant ZMQ as "ZeroMQ"
     participant Microservice
-    participant ZMQ as "ZeroMQ Pipe"
 
     Client->>ZMQ: Send Request (JSON)
-    ZMQ->>Microservice: Pass Request
+    ZMQ->>Microservice: Forward Request
     Microservice->>ZMQ: Send Response (JSON)
-    ZMQ->>Client: Pass Response
+    ZMQ->>Client: Forward Response
 ```
-
