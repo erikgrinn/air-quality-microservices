@@ -65,3 +65,14 @@ sequenceDiagram
     Microservice->>ZMQ: Send Response (JSON)
     ZMQ->>Client: Forward Response
 ```
+
+@startuml
+actor Client
+entity Microservice
+participant "ZeroMQ" as ZMQ
+
+Client -> ZMQ : Send Request (JSON)
+ZMQ -> Microservice : Forward Request
+Microservice -> ZMQ : Send Response (JSON)
+ZMQ -> Client : Forward Response
+@enduml
