@@ -54,16 +54,5 @@ The microservice sends responses in JSON format. The structure depends on the ac
 ```
 ## UML Diagram
 
-Client                       Microservice
-  |                                |
-  |  Send JSON Request             |
-  |-------------------------------->|
-  |                                |
-  |   Process Request              |
-  |-------------------------------->|
-  |                                |
-  |   Send JSON Response           |
-  |<--------------------------------|
-  |                                |
-  |   Parse and Handle Response    |
-  |-------------------------------->|
+  <img width="316" alt="image" src="https://github.com/user-attachments/assets/3938a758-9d48-4343-bd4f-7f0c6a361d70">
+
