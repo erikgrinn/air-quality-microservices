@@ -57,7 +57,7 @@ The microservice sends responses in JSON format. The structure depends on the ac
 ```mermaid
 sequenceDiagram
     participant Client
-    participant ZMQ as "ZeroMQ"
+    participant ZMQ
     participant Microservice
 
     Client->>ZMQ: Send Request with Action, Patient, Details (JSON)
