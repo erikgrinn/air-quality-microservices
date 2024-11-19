@@ -19,9 +19,7 @@ To make a request, clients must:
 
 #### Request Example
 ```python
-{
 import zmq
-import json
 
 context = zmq.Context()
 socket = context.socket(zmq.REQ)
@@ -52,6 +50,7 @@ The microservice sends responses in JSON format. The structure depends on the ac
 
 #### Receive Example
 ```python
+import zmq
 response = socket.recv_json()
 
 if response["status"] == "success":
