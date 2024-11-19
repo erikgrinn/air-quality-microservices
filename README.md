@@ -17,40 +17,51 @@ To make a request, clients must:
 1. Connect to the microservice using ZeroMQ on `tcp://<ip-address>:5555`.
 2. Send a JSON-formatted request with the following structure:
 
-#### JSON Request Format
-```json
+#### Request Example
+```python
 {
-  "action": "create" | "retrieve" | "update",
-  "patient": {
-    "first_name": "string",
-    "last_name": "string",
-    "date_of_birth": "YYYY-MM-DD"
-  },
-  "prescription": {
-    "written_drug": "string",
-    "quantity": integer,
-    "prescriber": "string"
-  }
+import zmq
+import json
+
+context = zmq.Context()
+socket = context.socket(zmq.REQ)
+socket.connect("tcp://localhost:5555")
+
+request = {
+    "action": "create",
+    "patient": {
+        "first_name": "John",
+        "last_name": "Doe",
+        "date_of_birth": "1990-01-01"
+    },
+    "prescription": {
+        "written_drug": "Amoxicillin",
+        "quantity": 30,
+        "prescriber": "Dr. Smith"
+    }
 }
+
+socket.send_json(request)
+response = socket.recv_json()
+print("Response:", response)
 ```
 
 ### **How to Receive Data**
 
 The microservice sends responses in JSON format. The structure depends on the action specified in the request:
 
-#### JSON Receive Format
-```json
-{
-  "status": "success" | "error",
-  "message": "string",
-  "history": [
-    {
-      "written_drug": "string",
-      "quantity": integer,
-      "prescriber": "string"
-    }
-  ]
-}
+#### Receive Example
+```python
+response = socket.recv_json()
+
+if response["status"] == "success":
+    print("Message:", response["message"])
+    if "history" in response:
+        print("Prescription History:")
+        for entry in response["history"]:
+            print(f"- Drug: {entry['written_drug']}, Quantity: {entry['quantity']}, Prescriber: {entry['prescriber']}")
+else:
+    print("Error:", response["message"])
 ```
 ## UML Diagram
 
