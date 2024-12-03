@@ -1,14 +1,26 @@
-const zmq = require("zeromq")
+// server.js
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const zmq = require("zeromq");
 
-async function run() {
-  const sock = new zmq.Reply()
+const app = express();
+const port = 3000; // Node.js HTTP server port
 
-  await sock.bind("tcp://127.0.0.1:3000")
+app.use(cors()); // Enable CORS
+app.use(bodyParser.json());
 
-  for await (const [msg] of sock) {
-    await sock.send(2 * parseInt(msg, 10))
-  }
-}
+const sock = new zmq.Request();
+sock.connect("tcp://localhost:5555"); // Python microservice port
 
-module.exports = { runServer };
+app.post("/process", async (req, res) => {
+  const message = req.body.csvData;
+  await sock.send(message);
 
+  const [result] = await sock.receive();
+  res.json(JSON.parse(result.toString()));
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});

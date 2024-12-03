@@ -3,7 +3,7 @@ body {
     flex-direction: column;
     font-family: Arial, sans-serif;
     margin: 0 auto;
-    height: 100vh;
+    /* height: 100vh; */
     background-color: rgb(232, 220, 217);
 }
 
@@ -37,16 +37,29 @@ body {
 }
 
 #output-container {
-    /* flex-grow: 1;             */
     margin-top: 12px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;        /* Prevents scrolling if content exceeds container */
+    flex-direction: row; /* Display children side by side */
+    justify-content: space-between; /* Distribute space evenly */
+    align-items: flex-start; /* Align items to the top */
+    overflow: auto; /* Allow scrolling if content exceeds container */
+    width: 100%;
+    min-height: 200px; /* Set a minimum height */
 }
 
 canvas {
-    max-height: 100%;        /* Ensures canvas doesn't exceed output-container height */
-    width: 100%;             /* Adjusts width to fill available space */
-    height: auto;            /* Keeps aspect ratio for the chart */
+    flex: 1; /* Allow the canvas to grow and fill available space */
+    max-width: 75%; /* Adjusts width to fill half of the available space */
+    height: auto; /* Keeps aspect ratio for the chart */
+}
+
+#statsContainer {
+    flex: 1; /* Allow the stats container to grow and fill available space */
+    max-width: 50%; /* Adjusts width to fill half of the available space */
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #f9f9f9; /* Optional: Add a background color */
+    border: 1px solid #ddd; /* Optional: Add a border */
+    border-radius: 5px; /* Optional: Add rounded corners */
+    margin-left: 20px; /* Add some space between the canvas and stats container */
 }

@@ -1,14 +1,13 @@
 import "./styles.css";
 import { createChart } from "./plot.js";
-import { fetchIQAir } from "./IQAir.js";
+// import { fetchIQAir } from "./IQAir.js";
+
+
+
 
 import Papa from "papaparse";
 // import data from './files/US_AQI_Lite.csv';
-// for zeromq if needed
-// const { runServer } = require("./services/server");
-// const { runClient } = require("./services/client");
-// runServer();
-// runClient();
+
 
 // Parse the CSV data
 // Fetch the CSV file and parse it with PapaParse
@@ -18,21 +17,61 @@ let parsedData = [];
 
 const response = await fetch(csvFilePath);
 const csvData = await response.text();
-// Parse the CSV data using PapaParse
 Papa.parse(csvData, {
-  header: true, // Treat the first row as headers
-  dynamicTyping: true, // Automatically convert numbers, booleans, etc.
-  skipEmptyLines: true, // Ignore empty lines
+  header: true,
+  dynamicTyping: true,
+  skipEmptyLines: true,
   complete: function (results) {
-    parsedData = results.data; // The parsed CSV data
-    console.log(parsedData); // Log the parsed data
-
-    // You can now use `parsedData` for further processing
+    parsedData = results.data;
   },
   error: function (error) {
     console.error("Error parsing CSV:", error);
   },
 });
+
+async function sendToMicroservice(data, filterState) {
+  const csvString = Papa.unparse(data);
+  const response = await fetch("http://localhost:3000/process", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ csvData: csvString }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const result = await response.json();
+  console.log("Received from microservice:", result);
+  displayStatistics(result, filterState);
+}
+
+const statsContainer = document.getElementById("statsContainer");
+statsContainer.innerHTML = `
+  <h3>Filtered State Statistics: N/A</h3>
+  <p>Total Count: N/A</p>
+  <p>AQI Mean: N/A</p>
+  <p>AQI Mode: N/A</p>
+  <p>AQI Min: N/A</p>
+  <p>AQI Max: N/A</p>
+  <p>AQI Std: N/A</p>
+`;
+
+function displayStatistics(stats, filterState) {
+  const statsContainer = document.getElementById("statsContainer");
+  statsContainer.innerHTML = `
+    <h3>Filtered State Statistics: ${filterState.toUpperCase()}</h3>
+    <p>Total Count: ${stats.total_count}</p>
+    <p>AQI Mean: ${stats.aqi_mean}</p>
+    <p>AQI Mode: ${stats.aqi_mode}</p>
+    <p>AQI Min: ${stats.aqi_min}</p>
+    <p>AQI Max: ${stats.aqi_max}</p>
+    <p>AQI Std: ${stats.aqi_std}</p>
+  `;
+}
+
 
 let cleanData = []; // Store parsed CSV data
 let filteredData = []; // Store filtered data
@@ -62,8 +101,6 @@ cleanData = parsedData.map((row) => {
   return cleanedRow;
 });
 
-console.log(cleanData);
-
 // Filter data when the user clicks "Apply Filter"
 document
   .getElementById("applyStateFilter")
@@ -79,6 +116,7 @@ document
       // Filter data based on user input
       filteredData = cleanData.filter((row) => row["state_id"] === filterState);
       console.log(filteredData);
+      sendToMicroservice(filteredData, filterState);
 
       downloadFilterBtn.disabled = false;
     } else {
@@ -115,4 +153,4 @@ downloadFilterBtn.addEventListener("click", function () {
 });
 
 createChart();
-fetchIQAir();
+// fetchIQAir();

@@ -11,6 +11,11 @@ module.exports = {
     path: path.resolve(__dirname, "dist"),
     clean: true,
   },
+  resolve: { //for zeromq
+    fallback: {
+      "path": require.resolve("path-browserify"),
+    },
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: "./src/template.html",

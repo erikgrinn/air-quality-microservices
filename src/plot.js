@@ -19,9 +19,7 @@ async function createChart() {
     dynamicTyping: true, // Automatically convert numbers, booleans, etc.
     skipEmptyLines: true, // Ignore empty lines
     complete: function(results) {
-        parsedData = results.data; // The parsed CSV data
-        console.log(parsedData); // Log the parsed data
-        
+        parsedData = results.data; // The parsed CSV data        
         // You can now use `parsedData` for further processing
     },
     error: function(error) {
