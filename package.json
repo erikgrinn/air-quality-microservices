@@ -15,8 +15,10 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "body-parser": "^1.20.3",
     "chart.js": "^4.4.6",
     "cors": "^2.8.5",
+    "express": "^4.21.1",
     "papaparse": "^5.4.1",
     "webpack": "^5.96.1",
     "zeromq": "^6.1.1"
