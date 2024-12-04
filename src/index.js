@@ -30,7 +30,7 @@ Papa.parse(csvData, {
   },
 });
 
-async function sendToMicroservice(data, filterState) {
+async function sendMicroserviceA(data, filterState) {
   const csvString = Papa.unparse(data);
   const response = await fetch("http://localhost:3000/process", {
     method: "POST",
@@ -129,7 +129,7 @@ document
     // Filter data based on user input
     filteredData = cleanData.filter((row) => row["state_id"] === filterState);
     console.log(filteredData);
-    sendToMicroservice(filteredData, filterState);
+    sendMicroserviceA(filteredData, filterState);
     downloadFilterBtn.disabled = false;
     cityAQIBtn.disabled = false;
    
