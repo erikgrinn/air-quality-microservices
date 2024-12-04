@@ -16,6 +16,9 @@ sockA.connect("tcp://localhost:5555"); // Python microservice port
 const sockB = new zmq.Request();
 sockB.connect("tcp://localhost:5556"); // Python real-time data microservice port
 
+const sockC = new zmq.Request();
+sockC.connect("tcp://localhost:5557"); // plot
+
 app.post("/process", async (req, res) => {
   const message = req.body.csvData;
   await sockA.send(message);
@@ -30,6 +33,15 @@ app.post("/iqair", async (req, res) => {
   await sockB.send(message);
 
   const [result] = await sockB.receive();
+  res.json(JSON.parse(result.toString()));
+});
+
+app.post("/plot", async (req, res) => {
+  const { plot_data } = req.body;
+  const message = JSON.stringify({ plot_data });
+  await sockC.send(message);
+
+  const [result] = await sockC.receive();
   res.json(JSON.parse(result.toString()));
 });
 

@@ -45,8 +45,46 @@ async function sendMicroserviceStats(data, filterState) {
   }
 
   const result = await response.json();
-  console.log("Received from microservice:", result);
+  // console.log("Received from microservice:", result);
   displayStatistics(result, filterState);
+  await fetchPlot(result)
+}
+
+async function fetchPlot(data) {
+  const response = await fetch("http://localhost:3000/plot", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ plot_data: data }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const result = await response.json();
+  console.log("Received plot data:", result);
+  // displayPlot(result.image);
+}
+
+async function fetchIQAirData(city, state, country = 'USA') {
+  console.log(city, state, country);
+  const response = await fetch("http://localhost:3000/iqair", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ city, state, country }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const result = await response.json();
+  // console.log("Received IQAir data:", result.data);
+  displayIQAirData(result.data);
 }
 
 const statsContainer = document.getElementById("statsContainer");
@@ -174,25 +212,6 @@ cityAQIBtn.addEventListener("click", function () {
     fetchIQAirData(majorCity, state, "USA");
   }
 })
-
-async function fetchIQAirData(city, state, country = 'USA') {
-  console.log(city, state, country);
-  const response = await fetch("http://localhost:3000/iqair", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ city, state, country }),
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  const result = await response.json();
-  console.log("Received IQAir data:", result.data);
-  displayIQAirData(result.data);
-}
 
 function displayIQAirData(data) {
   const iqAirContainer = document.getElementById("iqAirContainer");
