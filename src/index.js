@@ -108,24 +108,20 @@ document
 
     let uniqueStates = [...new Set(cleanData.map((row) => row["state_id"]))]; // Get unique states
 
-    if (filterState.length > 2) {
-      if (getStateAbbreviation(filterState.toUpperCase())) {
-        filterState = getStateAbbreviation(filterState.toUpperCase()).toLowerCase();
-      } else {
-        alert("Please enter a valid state or region.");
-        return;
-      }
-    }
-    
-    if (filterState && uniqueStates.includes(filterState)) {
-      // Filter data based on user input
-      filteredData = cleanData.filter((row) => row["state_id"] === filterState);
-      console.log(filteredData);
-      sendToMicroservice(filteredData, filterState);
-      downloadFilterBtn.disabled = false;
+    if (filterState.length > 2 && getStateAbbreviation(filterState.toUpperCase())) {
+      filterState = getStateAbbreviation(filterState.toUpperCase()).toLowerCase();
+    } else if (filterState.length == 2 && uniqueStates.includes(filterState)) { // using uniqueStates to check if the state exists in limited dataset
+      filterState = filterState;
     } else {
       alert("Please enter a valid state or region.");
     }
+  
+    // Filter data based on user input
+    filteredData = cleanData.filter((row) => row["state_id"] === filterState);
+    console.log(filteredData);
+    sendToMicroservice(filteredData, filterState);
+    downloadFilterBtn.disabled = false;
+   
   });
 
 downloadOriginalBtn.addEventListener("click", function () {
