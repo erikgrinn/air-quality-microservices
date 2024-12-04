@@ -1,9 +1,13 @@
 import "./styles.css";
 import { createChart } from "./plot.js";
-// import { fetchIQAir } from "./IQAir.js";
+import { fetchIQAir } from "./IQAir.js";
 import { getStateName, getStateAbbreviation } from "./stateConvert.js";
-
+import { getMajorCity, getStateByCity } from "./stateCities.js";
+// import getMajorCity from "./stateCities.js";
 import Papa from "papaparse";
+
+
+
 // import data from './files/US_AQI_Lite.csv';
 
 // Parse the CSV data
@@ -73,6 +77,7 @@ let cleanData = []; // Store parsed CSV data
 let filteredData = []; // Store filtered data
 const downloadOriginalBtn = document.getElementById("downloadOriginal");
 const downloadFilterBtn = document.getElementById("downloadFiltered");
+const cityAQIBtn = document.getElementById("cityAQI");
 
 cleanData = parsedData.map((row) => {
   const cleanedRow = {};
@@ -97,11 +102,13 @@ cleanData = parsedData.map((row) => {
   return cleanedRow;
 });
 
+
+let filterState = "";
 // Filter data when the user clicks "Apply Filter"
 document
   .getElementById("applyStateFilter")
   .addEventListener("click", function () {
-    let filterState = document
+    filterState = document
       .getElementById("filterState")
       .value.trim()
       .toLowerCase();
@@ -113,7 +120,10 @@ document
     } else if (filterState.length == 2 && uniqueStates.includes(filterState)) { // using uniqueStates to check if the state exists in limited dataset
       filterState = filterState;
     } else {
+      downloadFilterBtn.disabled = true;
+      cityAQIBtn.disabled = true;
       alert("Please enter a valid state or region.");
+      return
     }
   
     // Filter data based on user input
@@ -121,6 +131,7 @@ document
     console.log(filteredData);
     sendToMicroservice(filteredData, filterState);
     downloadFilterBtn.disabled = false;
+    cityAQIBtn.disabled = false;
    
   });
 
@@ -152,5 +163,10 @@ downloadFilterBtn.addEventListener("click", function () {
   }
 });
 
+cityAQIBtn.addEventListener("click", function () {
+  const majorCity = getMajorCity(filterState);
+  console.log(majorCity);
+})
+
 createChart();
-// fetchIQAir();
+fetchIQAir();
