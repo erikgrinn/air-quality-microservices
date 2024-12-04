@@ -1,6 +1,6 @@
 import "./styles.css";
 import { createChart } from "./plot.js";
-import { fetchIQAir } from "./IQAir.js";
+// import { fetchIQAir } from "./IQAir.js";
 import { getStateName, getStateAbbreviation } from "./stateConvert.js";
 import { getMajorCity, getStateByCity } from "./stateCities.js";
 // import getMajorCity from "./stateCities.js";
@@ -164,12 +164,19 @@ downloadFilterBtn.addEventListener("click", function () {
 });
 
 cityAQIBtn.addEventListener("click", function () {
-  const majorCity = getMajorCity(filterState);
-  console.log(majorCity)
-  // fetchIQAirData(majorCity, filterState, "USA");
+  if (filterState.length == 2) {
+    let majorCity = getMajorCity(filterState);
+    let state = getStateName(filterState.toUpperCase());
+    fetchIQAirData(majorCity, state, "USA");
+  } else if (filterState.length > 2) {
+    let state = filterState
+    let majorCity = getMajorCity(filterState);
+    fetchIQAirData(majorCity, state, "USA");
+  }
 })
 
 async function fetchIQAirData(city, state, country = 'USA') {
+  console.log(city, state, country);
   const response = await fetch("http://localhost:3000/iqair", {
     method: "POST",
     headers: {
@@ -183,9 +190,17 @@ async function fetchIQAirData(city, state, country = 'USA') {
   }
 
   const result = await response.json();
-  console.log("Received IQAir data:", result);
-  // displayIQAirData(result);
+  console.log("Received IQAir data:", result.data);
+  displayIQAirData(result.data);
 }
 
+function displayIQAirData(data) {
+  const iqAirContainer = document.getElementById("iqAirContainer");
+  iqAirContainer.innerHTML = `
+    <h3>${data.city}, ${data.state}, ${data.country}</h3>
+    <p>AQI: ${data.current.pollution.aqius}</p>
+  `;
+} 
+
 createChart();
-fetchIQAir();
+// fetchIQAir();

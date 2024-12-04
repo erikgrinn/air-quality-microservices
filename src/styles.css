@@ -53,13 +53,18 @@ canvas {
     height: auto; /* Keeps aspect ratio for the chart */
 }
 
-#statsContainer {
-    flex: 1; /* Allow the stats container to grow and fill available space */
-    max-width: 50%; /* Adjusts width to fill half of the available space */
+#sideContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+#sideContainer > div {
+    /* flex: 1;  */
+    max-width: 100%; /* Adjusts width to fill half of the available space */
     padding: 20px;
     box-sizing: border-box;
     background-color: #f9f9f9; /* Optional: Add a background color */
     border: 1px solid #ddd; /* Optional: Add a border */
     border-radius: 5px; /* Optional: Add rounded corners */
-    margin-left: 20px; /* Add some space between the canvas and stats container */
+    margin: 0 20px; /* Add some space between the canvas and stats container */
 }
