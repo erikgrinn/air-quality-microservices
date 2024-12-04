@@ -51,6 +51,7 @@ async function sendMicroserviceStats(data, filterState) {
 }
 
 async function fetchPlot(data) {
+  console.log(data);
   const response = await fetch("http://localhost:3000/plot", {
     method: "POST",
     headers: {
@@ -65,7 +66,12 @@ async function fetchPlot(data) {
 
   const result = await response.json();
   console.log("Received plot data:", result);
-  // displayPlot(result.image);
+  displayPlot(result.image);
+}
+
+function displayPlot(imageData) {
+  const plotContainer = document.getElementById("plotContainer");
+  plotContainer.innerHTML = `<img src="data:image/png;base64,${imageData}" alt="Plot Image" />`;
 }
 
 async function fetchIQAirData(city, state, country = 'USA') {
@@ -86,6 +92,7 @@ async function fetchIQAirData(city, state, country = 'USA') {
   // console.log("Received IQAir data:", result.data);
   displayIQAirData(result.data);
 }
+
 
 const statsContainer = document.getElementById("statsContainer");
 statsContainer.innerHTML = `
