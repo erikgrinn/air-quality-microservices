@@ -165,8 +165,27 @@ downloadFilterBtn.addEventListener("click", function () {
 
 cityAQIBtn.addEventListener("click", function () {
   const majorCity = getMajorCity(filterState);
-  console.log(majorCity);
+  console.log(majorCity)
+  // fetchIQAirData(majorCity, filterState, "USA");
 })
+
+async function fetchIQAirData(city, state, country = 'USA') {
+  const response = await fetch("http://localhost:3000/iqair", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ city, state, country }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const result = await response.json();
+  console.log("Received IQAir data:", result);
+  // displayIQAirData(result);
+}
 
 createChart();
 fetchIQAir();
