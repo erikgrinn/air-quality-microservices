@@ -1,13 +1,10 @@
 import "./styles.css";
 import { createChart } from "./plot.js";
 // import { fetchIQAir } from "./IQAir.js";
-
-
-
+import { getStateName, getStateAbbreviation } from "./stateConvert.js";
 
 import Papa from "papaparse";
 // import data from './files/US_AQI_Lite.csv';
-
 
 // Parse the CSV data
 // Fetch the CSV file and parse it with PapaParse
@@ -72,7 +69,6 @@ function displayStatistics(stats, filterState) {
   `;
 }
 
-
 let cleanData = []; // Store parsed CSV data
 let filteredData = []; // Store filtered data
 const downloadOriginalBtn = document.getElementById("downloadOriginal");
@@ -105,19 +101,27 @@ cleanData = parsedData.map((row) => {
 document
   .getElementById("applyStateFilter")
   .addEventListener("click", function () {
-    const filterState = document
+    let filterState = document
       .getElementById("filterState")
       .value.trim()
       .toLowerCase();
 
     let uniqueStates = [...new Set(cleanData.map((row) => row["state_id"]))]; // Get unique states
 
+    if (filterState.length > 2) {
+      if (getStateAbbreviation(filterState.toUpperCase())) {
+        filterState = getStateAbbreviation(filterState.toUpperCase()).toLowerCase();
+      } else {
+        alert("Please enter a valid state or region.");
+        return;
+      }
+    }
+    
     if (filterState && uniqueStates.includes(filterState)) {
       // Filter data based on user input
       filteredData = cleanData.filter((row) => row["state_id"] === filterState);
       console.log(filteredData);
       sendToMicroservice(filteredData, filterState);
-
       downloadFilterBtn.disabled = false;
     } else {
       alert("Please enter a valid state or region.");

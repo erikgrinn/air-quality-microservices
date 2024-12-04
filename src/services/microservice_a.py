@@ -1,7 +1,7 @@
 # server.py
 
 import io
-import zmq 
+import zmq
 import pandas as pd
 
 context = zmq.Context()
@@ -23,7 +23,9 @@ def process(message):
             "aqi_mode": float(data['aqi'].mode().iloc[0]),
             "aqi_min": round(float(data['aqi'].min()),2),
             "aqi_max": round(float(data['aqi'].max()),2),
-            "aqi_std": round(float(data['aqi'].std()),2)
+            "aqi_std": round(float(data['aqi'].std()),2),
+            "aqi_q1": round(float(data['aqi'].quantile(0.25)), 2),
+            "aqi_q3": round(float(data['aqi'].quantile(0.75)), 2)
         }
 
         return stats
