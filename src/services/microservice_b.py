@@ -8,7 +8,7 @@ socket.bind("tcp://*:5556")  # Bind to a new port for this microservice
 
 print("IQAir Microservice started on port 5556")
 
-API_KEY = '386c95d9-dadf-4028-8b72-14b94396bc2b'  # Replace with your IQAir API key
+API_KEY = ''  # Replace with your IQAir API key
 BASE_URL = 'http://api.airvisual.com/v2/city'
 
 def fetch_iqair_data(city, state, country='USA'):
