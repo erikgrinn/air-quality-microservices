@@ -3,32 +3,44 @@ import { createChart } from "./plot.js";
 // import { fetchIQAir } from "./IQAir.js";
 import { getStateName, getStateAbbreviation } from "./stateConvert.js";
 import { getMajorCity, getStateByCity } from "./stateCities.js";
-// import getMajorCity from "./stateCities.js";
 import Papa from "papaparse";
 
-
-
-// import data from './files/US_AQI_Lite.csv';
+// import data from './files/US_AQI_Lite.csv'; // not using because of papaparse
 
 // Parse the CSV data
 // Fetch the CSV file and parse it with PapaParse
 const csvFilePath = "./files/US_AQI_Lite.csv";
 
 let parsedData = [];
+let cleanData = [];
+let filteredData = [];
+let filterState = ""; // Declare filterState as a global variable
 
-const response = await fetch(csvFilePath);
-const csvData = await response.text();
-Papa.parse(csvData, {
-  header: true,
-  dynamicTyping: true,
-  skipEmptyLines: true,
-  complete: function (results) {
-    parsedData = results.data;
-  },
-  error: function (error) {
-    console.error("Error parsing CSV:", error);
-  },
-});
+async function fetchCSVData() {
+  const response = await fetch(csvFilePath);
+  const csvData = await response.text();
+  Papa.parse(csvData, {
+    header: true,
+    dynamicTyping: true,
+    skipEmptyLines: true,
+    complete: function (results) {
+      parsedData = results.data;
+      cleanData = parsedData.map((row) => {
+        const cleanedRow = {};
+        Object.keys(row).forEach((key) => {
+          const cleanKey = key.trim().toLowerCase().replace(/^"|"$/g, "").replace(/\\"/g, '"');
+          const value = row[key];
+          const cleanValue = typeof value === "string" ? value.trim().toLowerCase().replace(/^"|"$/g, "").replace(/\\"/g, '"') : value;
+          cleanedRow[cleanKey] = cleanValue;
+        });
+        return cleanedRow;
+      });
+    },
+    error: function (error) {
+      console.error("Error parsing CSV:", error);
+    },
+  });
+}
 
 async function sendMicroserviceStats(data, filterState) {
   const csvString = Papa.unparse(data);
@@ -101,7 +113,6 @@ function displayIQAirData(data) {
   `;
 } 
 
-
 const statsContainer = document.getElementById("statsContainer");
 statsContainer.innerHTML = `
   <h3>Filtered State Statistics: N/A</h3>
@@ -126,34 +137,6 @@ function displayStatistics(stats, filterState) {
   `;
 }
 
-let cleanData = []; // Store parsed CSV data
-let filteredData = []; // Store filtered data
-
-cleanData = parsedData.map((row) => {
-  const cleanedRow = {};
-
-  Object.keys(row).forEach((key) => {
-    // Clean the key: remove surrounding quotes and any leading/trailing spaces
-    const cleanKey = key
-      .trim()
-      .toLowerCase()
-      .replace(/^"|"$/g, "")
-      .replace(/\\"/g, '"');
-
-    const value = row[key];
-    const cleanValue =
-      typeof value === "string"
-        ? value.trim().toLowerCase().replace(/^"|"$/g, "").replace(/\\"/g, '"')
-        : value;
-
-    // Add cleaned key-value pair to the new row object
-    cleanedRow[cleanKey] = cleanValue;
-  });
-  return cleanedRow;
-});
-
-
-let filterState = "";
 // Filter data when the user clicks "Apply Filter"
 document
   .getElementById("applyStateFilter")
@@ -227,5 +210,6 @@ cityAQIBtn.addEventListener("click", function () {
   }
 })
 
+fetchCSVData()
 createChart();
 // fetchIQAir();
