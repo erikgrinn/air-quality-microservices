@@ -113,17 +113,6 @@ function displayIQAirData(data) {
   `;
 } 
 
-const statsContainer = document.getElementById("statsContainer");
-statsContainer.innerHTML = `
-  <h3>Filtered State Statistics: N/A</h3>
-  <p>Total Count: N/A</p>
-  <p>AQI Mean: N/A</p>
-  <p>AQI Mode: N/A</p>
-  <p>AQI Min: N/A</p>
-  <p>AQI Max: N/A</p>
-  <p>AQI Std: N/A</p>
-`;
-
 function displayStatistics(stats, filterState) {
   const statsContainer = document.getElementById("statsContainer");
   statsContainer.innerHTML = `

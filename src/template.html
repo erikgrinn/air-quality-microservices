@@ -30,7 +30,7 @@
             <!-- <input type="file" id="csvFileInput" accept=".csv"> -->
             <div>
                 <label>Filter by State:
-                    <input type="text" id="filterState" placeholder="ex. OR">
+                    <input type="text" id="filterState" placeholder="ex. OR, Oregon, OrEgOn">
                 </label>
                 <button id="applyStateFilter">Apply Filter</button>
                 <button id="downloadFiltered" disabled>Download Filtered Data</button>
@@ -41,9 +41,9 @@
     <div id="output-container">
         <canvas id="output"></canvas>
         <div id="sideContainer">
-            <div id="statsContainer"></div>
-            <div id="plotContainer"></div>
-            <div id="iqAirContainer"></div>
+            <div id="statsContainer"><span><h3>State Statistics</h3></span></div>
+            <div id="plotContainer"><span><h3>Boxplot</h3></span></div>
+            <div id="iqAirContainer"><span><h3>State City Data</h3></span></div>
         </div>
     </div>
 </body>
