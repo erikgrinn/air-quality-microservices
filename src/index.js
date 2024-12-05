@@ -47,7 +47,7 @@ async function sendMicroserviceStats(data, filterState) {
   const result = await response.json();
   // console.log("Received from microservice:", result);
   displayStatistics(result, filterState);
-  await fetchPlot(result)
+  fetchPlot(result)
 }
 
 async function fetchPlot(data) {
@@ -93,6 +93,14 @@ async function fetchIQAirData(city, state, country = 'USA') {
   displayIQAirData(result.data);
 }
 
+function displayIQAirData(data) {
+  const iqAirContainer = document.getElementById("iqAirContainer");
+  iqAirContainer.innerHTML = `
+    <h3>${data.city}, ${data.state}, ${data.country}</h3>
+    <p>AQI: ${data.current.pollution.aqius}</p>
+  `;
+} 
+
 
 const statsContainer = document.getElementById("statsContainer");
 statsContainer.innerHTML = `
@@ -120,9 +128,6 @@ function displayStatistics(stats, filterState) {
 
 let cleanData = []; // Store parsed CSV data
 let filteredData = []; // Store filtered data
-const downloadOriginalBtn = document.getElementById("downloadOriginal");
-const downloadFilterBtn = document.getElementById("downloadFiltered");
-const cityAQIBtn = document.getElementById("cityAQI");
 
 cleanData = parsedData.map((row) => {
   const cleanedRow = {};
@@ -177,9 +182,9 @@ document
     sendMicroserviceStats(filteredData, filterState);
     downloadFilterBtn.disabled = false;
     cityAQIBtn.disabled = false;
-   
   });
 
+const downloadOriginalBtn = document.getElementById("downloadOriginal");
 downloadOriginalBtn.addEventListener("click", function () {
   const csv = Papa.unparse(cleanData); // Convert filtered data back to CSV format
   const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
@@ -191,6 +196,7 @@ downloadOriginalBtn.addEventListener("click", function () {
   URL.revokeObjectURL(url); // Release memory after download
 });
 
+const downloadFilterBtn = document.getElementById("downloadFiltered");
 downloadFilterBtn.addEventListener("click", function () {
   if (filteredData.length > 0) {
     const csv = Papa.unparse(filteredData); // Convert filtered data back to CSV format
@@ -208,6 +214,7 @@ downloadFilterBtn.addEventListener("click", function () {
   }
 });
 
+const cityAQIBtn = document.getElementById("cityAQI");
 cityAQIBtn.addEventListener("click", function () {
   if (filterState.length == 2) {
     let majorCity = getMajorCity(filterState);
@@ -219,14 +226,6 @@ cityAQIBtn.addEventListener("click", function () {
     fetchIQAirData(majorCity, state, "USA");
   }
 })
-
-function displayIQAirData(data) {
-  const iqAirContainer = document.getElementById("iqAirContainer");
-  iqAirContainer.innerHTML = `
-    <h3>${data.city}, ${data.state}, ${data.country}</h3>
-    <p>AQI: ${data.current.pollution.aqius}</p>
-  `;
-} 
 
 createChart();
 // fetchIQAir();

@@ -15,6 +15,7 @@ def generate_custom_plot(data):
     # Extract summary statistics
     aqi_min = float(data.get('aqi_min', 0))
     aqi_max = float(data.get('aqi_max', 0))
+    aqi_median = float(data.get('aqi_median',0))
     aqi_mean = float(data.get('aqi_mean', 0))
     aqi_std = float(data.get('aqi_std', 0))
     aqi_q1 = float(data.get('aqi_q1', 0))
@@ -24,7 +25,7 @@ def generate_custom_plot(data):
 
     # Create a custom plot
     fig, ax = plt.subplots()
-    data_to_plot = [[aqi_mean, aqi_q1, aqi_q3, aqi_q1-aqi_std, aqi_q3+aqi_std]]
+    data_to_plot = [[aqi_median, aqi_q1, aqi_q3, aqi_q1-aqi_std, aqi_q3+aqi_std]]
     ax.boxplot(data_to_plot, vert=False)
     ax.set_title('AQI Summary Statistics')
     ax.set_xlabel('AQI Values')
@@ -32,7 +33,7 @@ def generate_custom_plot(data):
     # ax.set_yticklabels(['Min', 'Q1', 'Mean', 'Q3', 'Max'])
 
     # Add additional statistics as text
-    ax.text(aqi_mean, 1, f'Mean: {aqi_mean:.2f}', horizontalalignment='center', verticalalignment='center')
+    ax.text(aqi_median, 1.10, f'Median: {aqi_median:.2f}', horizontalalignment='center', verticalalignment='center')
     # ax.text(aqi_mode, 2, f'Mode: {aqi_mode:.2f}', horizontalalignment='center', verticalalignment='center')
     # ax.text(aqi_std, 3, f'Std: {aqi_std:.2f}', horizontalalignment='center', verticalalignment='center')
     # ax.text(total_count, 4, f'Count: {total_count}', horizontalalignment='center', verticalalignment='center')

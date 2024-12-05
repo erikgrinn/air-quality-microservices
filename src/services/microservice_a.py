@@ -19,8 +19,9 @@ def process(message):
 
         stats = {
             "total_count": int(data.shape[0]),
+            "aqi_median": round(float(data['aqi'].median()),2),
             "aqi_mean": round(float(data['aqi'].mean()),2),
-            "aqi_mode": float(data['aqi'].mode().iloc[0]),
+            "aqi_mode": round(float(data['aqi'].mode().iloc[0]),2),
             "aqi_min": round(float(data['aqi'].min()),2),
             "aqi_max": round(float(data['aqi'].max()),2),
             "aqi_std": round(float(data['aqi'].std()),2),
