@@ -6,7 +6,7 @@
     <title>Pollution Data</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel="stylesheet" href="84bb4fc080631c2605f1.css">
-    <script type='module' defer src="c84cb92317c6cc711534.js"></script>
+    <script type='module' defer src="bb9d9f228da9c09e0075.js"></script>
 <script defer src="main.js"></script></head>
 <body>
     <div class="header">
@@ -14,14 +14,14 @@
             <div class="welcome"><b>Welcome!</b></div>
             <div class="steps">
                 <p>
-                Here you can download air quality data, rated from 0 (bad quality) to 100 (good quality)
+                Here you can download air quality data and view statistics by State within the U.S.
                 </p>
                 <p>
                 <b>Download original unfiltered data</b> or
-                <b>enter a state, apply filter, and download filtered data</b>
+                <b>apply a state filter to view relevant information, find AQI of the state's major city, and download the filtered data</b>
                 </p>
                 <p>
-                <em>A new filter is always applied to the original data, so feel free to try several locations</em>
+                <em>A new filter is always applied to the original data, so feel free to try several locations. Data is available on states that appear within the graph below.</em>
                 </p>
             </div>
         </div>
@@ -30,11 +30,11 @@
             <!-- <input type="file" id="csvFileInput" accept=".csv"> -->
             <div>
                 <label>Filter by State:
-                    <input type="text" id="filterState" placeholder="ex. OR, Oregon, OrEgOn">
+                    <input type="text" id="filterState" placeholder="ex. OR, Oregon">
                 </label>
-                <button id="applyStateFilter">Apply Filter</button>
-                <button id="downloadFiltered" disabled>Download Filtered Data</button>
+                <button id="applyStateFilter" disabled>Apply Filter</button>
                 <button id="cityAQI" disabled>Display Data For State's Major City</button>
+                <button id="downloadFiltered" disabled>Download Filtered Data</button>
             </div>
         </div>
     </div>
@@ -43,6 +43,7 @@
         <div id="sideContainer">
             <div id="statsContainer"><span><h3>State Statistics</h3></span></div>
             <div id="plotContainer"><span><h3>Boxplot</h3></span></div>
+            <div id="uniqueParametersContainer"><span><h3>Main Pollutant</h3></span></div>
             <div id="iqAirContainer"><span><h3>State City Data</h3></span></div>
         </div>
     </div>

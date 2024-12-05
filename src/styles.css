@@ -3,7 +3,7 @@ body {
     flex-direction: column;
     font-family: Arial, sans-serif;
     margin: 0 auto;
-    /* height: 100vh; */
+    height: 100vh;
     background-color: rgb(232, 220, 217);
 }
 
@@ -11,6 +11,7 @@ body {
     /* display: flex; */
     margin: 0;
     background-color: #ea8024 ;
+    padding: 12px;
 }
 
 .header-title {
@@ -37,12 +38,12 @@ body {
 }
 
 #output-container {
-    margin-top: 12px;
+    /* margin-top: 12px; */
     display: flex;
     flex-direction: row; /* Display children side by side */
-    justify-content: space-between; /* Distribute space evenly */
+    /* justify-content: space-evenly; */
     align-items: flex-start; /* Align items to the top */
-    overflow: auto; /* Allow scrolling if content exceeds container */
+    overflow: auto; /* Allow scrolling if content exceeds container - important - scrolls container portion */
     width: 100%;
     min-height: 200px; /* Set a minimum height */
 }
@@ -66,5 +67,5 @@ canvas {
     background-color: #f9f9f9; /* Optional: Add a background color */
     border: 1px solid #ddd; /* Optional: Add a border */
     border-radius: 5px; /* Optional: Add rounded corners */
-    margin: 0 20px; /* Add some space between the canvas and stats container */
+    /* margin: 0 20px; */
 }

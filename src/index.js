@@ -1,10 +1,9 @@
 import "./styles.css";
 import { createChart } from "./plot.js";
-// import { fetchIQAir } from "./IQAir.js";
 import { getStateName, getStateAbbreviation } from "./stateConvert.js";
 import { getMajorCity, getStateByCity } from "./stateCities.js";
 import Papa from "papaparse";
-
+// import { fetchIQAir } from "./IQAir.js";
 // import data from './files/US_AQI_Lite.csv'; // not using because of papaparse
 
 // Parse the CSV data
@@ -14,7 +13,7 @@ const csvFilePath = "./files/US_AQI_Lite.csv";
 let parsedData = [];
 let cleanData = [];
 let filteredData = [];
-let filterState = ""; // Declare filterState as a global variable
+let filterState = "";
 
 async function fetchCSVData() {
   const response = await fetch(csvFilePath);
@@ -28,9 +27,20 @@ async function fetchCSVData() {
       cleanData = parsedData.map((row) => {
         const cleanedRow = {};
         Object.keys(row).forEach((key) => {
-          const cleanKey = key.trim().toLowerCase().replace(/^"|"$/g, "").replace(/\\"/g, '"');
+          const cleanKey = key
+            .trim()
+            .toLowerCase()
+            .replace(/^"|"$/g, "")
+            .replace(/\\"/g, '"');
           const value = row[key];
-          const cleanValue = typeof value === "string" ? value.trim().toLowerCase().replace(/^"|"$/g, "").replace(/\\"/g, '"') : value;
+          const cleanValue =
+            typeof value === "string"
+              ? value
+                  .trim()
+                  .toLowerCase()
+                  .replace(/^"|"$/g, "")
+                  .replace(/\\"/g, '"')
+              : value;
           cleanedRow[cleanKey] = cleanValue;
         });
         return cleanedRow;
@@ -42,7 +52,7 @@ async function fetchCSVData() {
   });
 }
 
-async function sendMicroserviceStats(data, filterState) {
+async function fetchStats(data, filterState) {
   const csvString = Papa.unparse(data);
   const response = await fetch("http://localhost:3000/process", {
     method: "POST",
@@ -57,13 +67,11 @@ async function sendMicroserviceStats(data, filterState) {
   }
 
   const result = await response.json();
-  // console.log("Received from microservice:", result);
   displayStatistics(result, filterState);
-  fetchPlot(result)
+  fetchPlot(result);
 }
 
 async function fetchPlot(data) {
-  console.log(data);
   const response = await fetch("http://localhost:3000/plot", {
     method: "POST",
     headers: {
@@ -77,7 +85,6 @@ async function fetchPlot(data) {
   }
 
   const result = await response.json();
-  console.log("Received plot data:", result);
   displayPlot(result.image);
 }
 
@@ -86,8 +93,7 @@ function displayPlot(imageData) {
   plotContainer.innerHTML = `<img src="data:image/png;base64,${imageData}" alt="Plot Image" />`;
 }
 
-async function fetchIQAirData(city, state, country = 'USA') {
-  console.log(city, state, country);
+async function fetchIQAirData(city, state, country = "USA") {
   const response = await fetch("http://localhost:3000/iqair", {
     method: "POST",
     headers: {
@@ -101,7 +107,6 @@ async function fetchIQAirData(city, state, country = 'USA') {
   }
 
   const result = await response.json();
-  // console.log("Received IQAir data:", result.data);
   displayIQAirData(result.data);
 }
 
@@ -111,7 +116,8 @@ function displayIQAirData(data) {
     <h3>${data.city}, ${data.state}, ${data.country}</h3>
     <p>AQI: ${data.current.pollution.aqius}</p>
   `;
-} 
+  cityAQIBtn.disabled = true;
+}
 
 function displayStatistics(stats, filterState) {
   const statsContainer = document.getElementById("statsContainer");
@@ -126,35 +132,77 @@ function displayStatistics(stats, filterState) {
   `;
 }
 
-// Filter data when the user clicks "Apply Filter"
-document
-  .getElementById("applyStateFilter")
-  .addEventListener("click", function () {
-    filterState = document
-      .getElementById("filterState")
-      .value.trim()
-      .toLowerCase();
-
-    let uniqueStates = [...new Set(cleanData.map((row) => row["state_id"]))]; // Get unique states
-
-    if (filterState.length > 2 && getStateAbbreviation(filterState.toUpperCase())) {
-      filterState = getStateAbbreviation(filterState.toUpperCase()).toLowerCase();
-    } else if (filterState.length == 2 && uniqueStates.includes(filterState)) { // using uniqueStates to check if the state exists in limited dataset
-      filterState = filterState;
-    } else {
-      downloadFilterBtn.disabled = true;
-      cityAQIBtn.disabled = true;
-      alert("Please enter a valid state or region.");
-      return
-    }
-  
-    // Filter data based on user input
-    filteredData = cleanData.filter((row) => row["state_id"] === filterState);
-    console.log(filteredData);
-    sendMicroserviceStats(filteredData, filterState);
-    downloadFilterBtn.disabled = false;
-    cityAQIBtn.disabled = false;
+async function fetchUniqueDefiningParameters(csvData) {
+  const csvString = Papa.unparse(csvData);
+  const response = await fetch("http://localhost:3000/unique-defining-parameters", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ csvData: csvString }),
   });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  const result = await response.json();
+  console.log("Unique Defining Parameters:", result.unique_defining_parameters);
+  displayUniqueDefiningParameters(result.unique_defining_parameters);
+}
+
+function displayUniqueDefiningParameters(parameters) {
+  const container = document.getElementById("uniqueParametersContainer");
+  container.innerHTML = `
+    <h3>Main Pollutant: ${filterState.toUpperCase()}</h3>
+    <ul>
+      ${parameters.toUpperCase()}
+    </ul>
+  `;
+  // below for multiple params:
+  // ${parameters.map(param => `<li>${param}</li>`).join('')}
+}
+
+// placing these here since inputState event listener references filter button
+const inputState = document.getElementById("filterState");
+const applyStateFilterBtn = document.getElementById("applyStateFilter");
+
+inputState.addEventListener("input", function () {
+  applyStateFilterBtn.disabled = false;
+});
+
+// Filter data when the user clicks "Apply Filter"
+applyStateFilterBtn.addEventListener("click", function () {
+  filterState = document
+    .getElementById("filterState")
+    .value.trim()
+    .toLowerCase();
+
+  let uniqueStates = [...new Set(cleanData.map((row) => row["state_id"]))]; // Get unique states
+
+  if (
+    filterState.length > 2 &&
+    getStateAbbreviation(filterState.toUpperCase())
+  ) {
+    filterState = getStateAbbreviation(filterState.toUpperCase()).toLowerCase();
+  } else if (filterState.length == 2 && uniqueStates.includes(filterState)) {
+    // using uniqueStates to check if the state exists in limited dataset
+    filterState = filterState;
+  } else {
+    downloadFilterBtn.disabled = true;
+    cityAQIBtn.disabled = true;
+    alert("Please enter a valid state or region.");
+    return;
+  }
+
+  // Filter data based on user input
+  filteredData = cleanData.filter((row) => row["state_id"] === filterState);
+  fetchStats(filteredData, filterState);
+  fetchUniqueDefiningParameters(filteredData)
+  downloadFilterBtn.disabled = false;
+  cityAQIBtn.disabled = false;
+  applyStateFilterBtn.disabled = true;
+});
 
 const downloadOriginalBtn = document.getElementById("downloadOriginal");
 downloadOriginalBtn.addEventListener("click", function () {
@@ -193,12 +241,12 @@ cityAQIBtn.addEventListener("click", function () {
     let state = getStateName(filterState.toUpperCase());
     fetchIQAirData(majorCity, state, "USA");
   } else if (filterState.length > 2) {
-    let state = filterState
+    let state = filterState;
     let majorCity = getMajorCity(filterState);
     fetchIQAirData(majorCity, state, "USA");
   }
-})
+});
 
-fetchCSVData()
+fetchCSVData();
 createChart();
 // fetchIQAir();

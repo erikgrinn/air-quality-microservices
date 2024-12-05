@@ -19,6 +19,9 @@ sockB.connect("tcp://localhost:5556"); // Python real-time data microservice por
 const sockC = new zmq.Request();
 sockC.connect("tcp://localhost:5557"); // plot
 
+const sockD = new zmq.Request();
+sockD.connect("tcp://localhost:5558"); // Unique Defining Parameter microservice port
+
 app.post("/process", async (req, res) => {
   const message = req.body.csvData;
   await sockA.send(message);
@@ -42,6 +45,14 @@ app.post("/plot", async (req, res) => {
   await sockC.send(message);
 
   const [result] = await sockC.receive();
+  res.json(JSON.parse(result.toString()));
+});
+
+app.post("/unique-defining-parameters", async (req, res) => {
+  const message = req.body.csvData;
+  await sockD.send(message);
+
+  const [result] = await sockD.receive();
   res.json(JSON.parse(result.toString()));
 });
 
