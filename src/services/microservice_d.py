@@ -23,6 +23,7 @@ while True:
 
     try:
         result = get_unique_defining_parameters(message)
+        print('sending parameter')
         socket.send_json(result)
     except Exception as e:
         socket.send_json({"error": str(e)})

@@ -2,14 +2,14 @@ import zmq
 import requests
 import json
 
+API_KEY = ''  # Replace with your IQAir API key
+BASE_URL = 'http://api.airvisual.com/v2/city'
+
 context = zmq.Context()
 socket = context.socket(zmq.REP)
 socket.bind("tcp://*:5556")  # Bind to a new port for this microservice
 
 print("IQAir Microservice started on port 5556")
-
-API_KEY = ''  # Replace with your IQAir API key
-BASE_URL = 'http://api.airvisual.com/v2/city'
 
 def fetch_iqair_data(city, state, country='USA'):
     url = f"{BASE_URL}?city={city}&state={state}&country={country}&key={API_KEY}"
@@ -30,6 +30,7 @@ while True:
         country = data.get('country', 'USA')
         if city and state:
             iqair_data = fetch_iqair_data(city, state, country)
+            print('sending iqair data')
             socket.send_json(iqair_data)
         else:
             socket.send_json({"error": "Invalid input"})

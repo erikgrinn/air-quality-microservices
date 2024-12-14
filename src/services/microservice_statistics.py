@@ -1,5 +1,3 @@
-# server.py
-
 import io
 import zmq
 import pandas as pd
@@ -8,15 +6,13 @@ context = zmq.Context()
 socket = context.socket(zmq.REP)
 socket.bind("tcp://*:5555")
 
-print("Server started")
+print("Stats Microservice started on port 5555")
 
 def process(message):
     try:
         data = pd.read_csv(io.StringIO(message))
-
         if 'aqi' not in data.columns:
             return {"error": "Column 'aqi' not found in data"}
-
         stats = {
             "total_count": int(data.shape[0]),
             "aqi_median": round(float(data['aqi'].median()),2),
@@ -28,7 +24,6 @@ def process(message):
             "aqi_q1": round(float(data['aqi'].quantile(0.25)), 2),
             "aqi_q3": round(float(data['aqi'].quantile(0.75)), 2)
         }
-
         return stats
     except Exception as e:
         return {"Error": str(e)}
@@ -42,4 +37,3 @@ while True:
     print(stats)
     print("\nReturning Stats")
     socket.send_json(stats)
-

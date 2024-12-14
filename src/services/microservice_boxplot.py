@@ -55,6 +55,7 @@ while True:
         plot_data = data.get('plot_data')
         if plot_data:
             img_base64 = generate_custom_plot(plot_data)
+            print('sending plot')
             socket.send_json({"image": img_base64})
         else:
             socket.send_json({"error": "Invalid input"})
