@@ -42,12 +42,17 @@ The project uses several Python microservices to handle different tasks:
 
 ## Usage
 
-1. **Start the Node.js server**:
+1. **Start the webpack server**:
 ```sh
     npm start
 ```
 
-2. **Run the Python microservices**:
+2. **Start the ZeroMQ server**:
+```sh
+    node src/services/server.js
+```
+
+3. **Run the Python microservices**:
 - Statistics Microservice
 ```sh
     python src/services/microservice_statistics.py
@@ -68,9 +73,9 @@ The project uses several Python microservices to handle different tasks:
     python src/services/microservice_d.py
 ```
 
-3. **Open the web application**:
+4. **Open the web application**:
 
-Open your web browser and navigate to http://localhost:3000
+Open your web browser and navigate to http://localhost:8080
 
 ## Project Structure:
 
