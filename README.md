@@ -13,18 +13,19 @@ This project provides a web application for analyzing and visualizing air qualit
 
 The project uses several Python microservices to handle different tasks:
 
-1. **Statistics Microservice**: Calculates statistics for the filtered air quality data.
-2. **IQAir Data Microservice**: Fetches air quality data from the IQAir API.
-3. **Plot Microservice**: Generates a boxplot for the air quality data.
-4. **Unique Defining Parameter Microservice**: Retrieves the first unique defining parameter for the filtered data.
+1. **Statistics Microservice**:
+Calculates statistics for the filtered air quality data.
+2. **Plot Microservice**:
+Generates a boxplot for the air quality data.
+3. **Unique Defining Parameter Microservice**: Retrieves the first unique defining parameter for the filtered data.
 
 ## Installation
 
 1. **Clone the repository**:
 
 ```sh
-   git clone https://github.com/yourusername/air-quality-data-analysis.git
-   cd air-quality-data-analysis
+   git clone https://github.com/erikgrinn/mainproject.git
+   cd main_project
 ```
 2. **Install Node.js dependencies**:
 ```sh
@@ -32,17 +33,16 @@ The project uses several Python microservices to handle different tasks:
 ```
 3. **Install Python dependencies**:
 ```sh
-   pip install zmq
-   pandas requests matplotlib
+   pip install zmq pandas requests matplotlib
 ```
-4. **Set up environment variables**:
+<!-- 4. **Set up environment variables**:
 ```sh
    IQAIR_API_KEY=your_iqair_api_key
-```
+``` -->
 
 ## Usage
 
-1. **Start the webpack server**:
+1. **Visit the deployed site or start the webpack server**:
 ```sh
     npm start
 ```
@@ -58,10 +58,10 @@ The project uses several Python microservices to handle different tasks:
     python src/services/microservice_statistics.py
 ```
 
-- IQAir Data Microservice
+<!-- - IQAir Data Microservice
 ```sh
     python src/services/microservice_iqair.py
-```
+``` -->
 
 - Plot Microservice
 ```sh
@@ -75,29 +75,7 @@ The project uses several Python microservices to handle different tasks:
 
 4. **Open the web application**:
 
-Open your web browser and navigate to http://localhost:8080
-
-## Project Structure:
-
-air-quality-data-analysis/
-├── src/
-│   ├── services/
-│   │   ├── microservice_statistics.py
-│   │   ├── microservice_IQAir.py
-│   │   ├── microservice_boxplot.py
-│   │   ├── microservice_d.py
-│   ├── index.js
-│   ├── template.html
-│   └── styles.css
-├── files/
-│   └── US_AQI_Lite.csv
-├── .env
-├── [package.json](http://_vscodecontentref_/2)
-├── [webpack.config.js](http://_vscodecontentref_/3)
-└── [README.md](http://_vscodecontentref_/4)
+Visit the deployed link or open your web browser and navigate to http://localhost:8080
 
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
-
-## License
-This project is licensed under the MIT License. See the LICENSE file for details.
