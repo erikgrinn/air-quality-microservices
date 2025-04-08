@@ -93,31 +93,32 @@ function displayPlot(imageData) {
   plotContainer.innerHTML = `<img src="data:image/png;base64,${imageData}" alt="Plot Image" />`;
 }
 
-async function fetchIQAirData(city, state, country = "USA") {
-  const response = await fetch("http://localhost:3000/iqair", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ city, state, country }),
-  });
+// async function fetchIQAirData(city, state, country = "USA") {
+//   const response = await fetch("http://localhost:3000/iqair", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify({ city, state, country }),
+//   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
+//   if (!response.ok) {
+//     throw new Error(`HTTP error! status: ${response.status}`);
+//   }
 
-  const result = await response.json();
-  displayIQAirData(result.data);
-}
+//   const result = await response.json();
+//   console.log(result)
+//   displayIQAirData(result.data);
+// }
 
-function displayIQAirData(data) {
-  const iqAirContainer = document.getElementById("iqAirContainer");
-  iqAirContainer.innerHTML = `
-    <h3>${data.city}, ${data.state}, ${data.country}</h3>
-    <p>AQI: ${data.current.pollution.aqius}</p>
-  `;
-  cityAQIBtn.disabled = true;
-}
+// function displayIQAirData(data) {
+//   const iqAirContainer = document.getElementById("iqAirContainer");
+//   iqAirContainer.innerHTML = `
+//     <h3>${data.city}, ${data.state}, ${data.country}</h3>
+//     <p>AQI: ${data.current.pollution.aqius}</p>
+//   `;
+//   cityAQIBtn.disabled = true;
+// }
 
 function displayStatistics(stats, filterState) {
   const statsContainer = document.getElementById("statsContainer");
@@ -190,7 +191,7 @@ applyStateFilterBtn.addEventListener("click", function () {
     filterState = filterState;
   } else {
     downloadFilterBtn.disabled = true;
-    cityAQIBtn.disabled = true;
+    // cityAQIBtn.disabled = true;
     alert("Please enter a valid state or region.");
     return;
   }
@@ -200,7 +201,7 @@ applyStateFilterBtn.addEventListener("click", function () {
   fetchStats(filteredData, filterState);
   fetchUniqueDefiningParameters(filteredData)
   downloadFilterBtn.disabled = false;
-  cityAQIBtn.disabled = false;
+  // cityAQIBtn.disabled = false;
   applyStateFilterBtn.disabled = true;
 });
 
@@ -234,18 +235,18 @@ downloadFilterBtn.addEventListener("click", function () {
   }
 });
 
-const cityAQIBtn = document.getElementById("cityAQI");
-cityAQIBtn.addEventListener("click", function () {
-  if (filterState.length == 2) {
-    let majorCity = getMajorCity(filterState);
-    let state = getStateName(filterState.toUpperCase());
-    fetchIQAirData(majorCity, state, "USA");
-  } else if (filterState.length > 2) {
-    let state = filterState;
-    let majorCity = getMajorCity(filterState);
-    fetchIQAirData(majorCity, state, "USA");
-  }
-});
+// const cityAQIBtn = document.getElementById("cityAQI");
+// cityAQIBtn.addEventListener("click", function () {
+//   if (filterState.length == 2) {
+//     let majorCity = getMajorCity(filterState);
+//     let state = getStateName(filterState.toUpperCase());
+//     fetchIQAirData(majorCity, state, "USA");
+//   } else if (filterState.length > 2) {
+//     let state = filterState;
+//     let majorCity = getMajorCity(filterState);
+//     fetchIQAirData(majorCity, state, "USA");
+//   }
+// });
 
 fetchCSVData();
 createChart();
