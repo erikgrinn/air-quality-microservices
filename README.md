@@ -42,7 +42,7 @@ Generates a boxplot for the air quality data.
 
 ## Usage
 
-1. **Visit the deployed site or start the webpack server**:
+1. **Start the webpack server**:
 ```sh
     npm start
 ```
@@ -75,7 +75,7 @@ Generates a boxplot for the air quality data.
 
 4. **Open the web application**:
 
-Visit the deployed link or open your web browser and navigate to http://localhost:8080
+Open your web browser and navigate to http://localhost:8080
 
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
