@@ -1,5 +1,5 @@
 {
-  "name": "main-project",
+  "name": "air-quality-microservices",
   "version": "1.0.0",
   "main": "webpack.config.js",
   "scripts": {
