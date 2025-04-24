@@ -70,7 +70,7 @@ Generates a boxplot for the air quality data.
 
 - Unique Defining Parameter Microservice
 ```sh
-    python src/services/microservice_d.py
+    python src/services/microservice_pollutant.py
 ```
 
 4. **Open the web application**:
